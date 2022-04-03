@@ -1,0 +1,8 @@
+# Switch this to use a shared Prettier config...
+.env
+/yarn-error.log
+/yarn.lock
+/node_modules/
+/src/types
+/dist
+.cache

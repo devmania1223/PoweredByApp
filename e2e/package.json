@@ -1,0 +1,17 @@
+{
+  "name": "poweredby-e2e",
+  "version": "1.0.0",
+  "description": "E2E testing happens sometimes",
+  "scripts": {
+    "test:ci": "CYPRESS_BASE_URL=http://localhost:1234 yarn run cypress open"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "cypress": "5.5.0"
+  },
+  "dependencies": {
+    "lodash": "^4.17.21"
+  }
+}

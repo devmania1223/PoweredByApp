@@ -1,0 +1,87 @@
+import { TypographyOptions } from '@material-ui/core/styles/createTypography';
+import { colors } from './palette';
+
+export const typography: TypographyOptions = {
+  h1: {
+    fontFamily: 'Open Sans, sans-serif',
+    fontSize: '3.375rem',
+    lineHeight: '4rem',
+    fontWeight: 300,
+    color: colors.grayDark,
+  },
+  h2: {
+    fontFamily: 'Open Sans, sans-serif',
+    fontSize: '2.875rem',
+    lineHeight: '3.5rem',
+    fontWeight: 300,
+    color: colors.grayDark,
+  },
+  h3: {
+    fontFamily: 'Open Sans, sans-serif',
+    fontWeight: 700,
+    fontSize: '2.375rem',
+    lineHeight: '2.875rem',
+    color: colors.grayDark,
+  },
+  h4: {
+    fontFamily: 'Open Sans, sans-serif',
+    fontWeight: 700,
+    fontSize: '1.875rem',
+    lineHeight: '2.375rem',
+    color: colors.grayDark,
+  },
+  h5: {
+    fontFamily: 'Open Sans, sans-serif',
+    fontWeight: 400,
+    fontSize: '1.5rem',
+    lineHeight: '2rem',
+    letterSpacing: '.18px',
+    color: colors.grayDark,
+  },
+  h6: {
+    fontFamily: 'Open Sans, sans-serif',
+    fontWeight: 600,
+    fontSize: '1.25rem',
+    lineHeight: '1.75rem',
+    letterSpacing: '.15px',
+    color: colors.grayDark,
+  },
+  subtitle1: {
+    fontFamily: 'Open Sans, sans-serif',
+    fontWeight: 500,
+    fontSize: '1rem',
+    lineHeight: '1.5rem',
+    letterSpacing: '.1px',
+    color: colors.grayDark,
+  },
+  subtitle2: {
+    fontFamily: 'Open Sans, sans-serif',
+    fontWeight: 600,
+    fontSize: '.875rem',
+    lineHeight: '1.375rem',
+    letterSpacing: '.1px',
+    color: colors.grayDark,
+  },
+  body1: {
+    fontFamily: 'Roboto, sans-serif',
+    fontWeight: 400,
+    fontSize: '1rem',
+    lineHeight: '1.5rem',
+    letterSpacing: '.5px',
+    color: colors.grayDark,
+  },
+  body2: {
+    fontFamily: 'Roboto, sans-serif',
+    fontWeight: 400,
+    fontSize: '.875rem',
+    lineHeight: '1.375rem',
+    letterSpacing: '.5px',
+    color: colors.grayDark,
+  },
+  button: {
+    fontFamily: 'Roboto, sans-serif',
+    fontWeight: 400,
+    fontSize: '1rem',
+    color: colors.pureWhite,
+  },
+};

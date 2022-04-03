@@ -1,0 +1,14 @@
+{
+  "name": "@liiingo/templates",
+  "version": "0.1.0",
+  "description": "Topic templates for the PoweredBy onboarding platform",
+  "author": "Liiingo",
+  "main": "./src/index.ts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/liiingo/poweredby",
+    "directory": "templates"
+  },
+  "license": "UNLICENSED",
+  "private": true
+}

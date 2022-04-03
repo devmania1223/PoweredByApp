@@ -1,0 +1,1014 @@
+type ValidationError implements ErrorInterface {
+  """Combined error message from all validators"""
+  message: String
+
+  """List of validator errors"""
+  errors: [ValidatorError!]
+}
+
+interface ErrorInterface {
+  """Generic error message"""
+  message: String
+}
+
+type ValidatorError {
+  """Validation error message"""
+  message: String
+
+  """Source of the validation error from the model path"""
+  path: String
+
+  """Field value which occurs the validation error"""
+  value: JSON
+
+  """
+  Input record idx in array which occurs the validation error. This `idx` is useful for createMany operation. For singular operations it always be 0. For *Many operations `idx` represents record index in array received from user.
+  """
+  idx: Int!
+}
+
+"""
+The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
+"""
+scalar JSON @specifiedBy(url: "http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf")
+
+type MongoError implements ErrorInterface {
+  """MongoDB error message"""
+  message: String
+
+  """MongoDB error code"""
+  code: Int
+}
+
+type RuntimeError implements ErrorInterface {
+  """Runtime error message"""
+  message: String
+}
+
+type Query {
+  flows(
+    """Filter by fields"""
+    filter: FilterFindManyAppOnboardingFlowInput
+    skip: Int
+    limit: Int = 100
+    sort: SortFindManyAppOnboardingFlowInput
+  ): [AppOnboardingFlow!]!
+  appOnboardingFlowByRoute(route: String!): AppOnboardingFlow
+  subscription: getSubscriptionResponse
+  customerPaymentMethod: CustomerPaymentMethodResponse
+  organizationById(_id: MongoID!): Organization
+  organizations(
+    """Forward pagination argument for returning at most first edges"""
+    first: Int
+
+    """Forward pagination argument for returning at most first edges"""
+    after: String
+
+    """Backward pagination argument for returning at most last edges"""
+    last: Int
+
+    """Backward pagination argument for returning at most last edges"""
+    before: String
+
+    """Filter by fields"""
+    filter: FilterFindManyOrganizationInput
+
+    """Sort argument for data ordering"""
+    sort: SortConnectionOrganizationEnum = _ID_DESC
+  ): OrganizationConnection
+  getLocationById(_id: MongoID!): Location
+  getNotifications(topicId: String!): getNotificationResponse
+  userById(_id: MongoID!): User
+  user(
+    """Filter by fields"""
+    filter: FilterFindOneUserInput
+    skip: Int
+    sort: SortFindOneUserInput
+  ): User
+  userConnection(
+    """Forward pagination argument for returning at most first edges"""
+    first: Int
+
+    """Forward pagination argument for returning at most first edges"""
+    after: String
+
+    """Backward pagination argument for returning at most last edges"""
+    last: Int
+
+    """Backward pagination argument for returning at most last edges"""
+    before: String
+
+    """Filter by fields"""
+    filter: FilterFindManyUserInput
+
+    """Sort argument for data ordering"""
+    sort: SortConnectionUserEnum = _ID_DESC
+  ): UserConnection
+  planById(_id: MongoID!): Plan
+  planByName(name: String!): Plan
+}
+
+type AppOnboardingFlow {
+  """
+  The portion of the URL immediately following the domain name that will route to the onboarding flow for this Organization. For example: "myRoute" will make this onboarding flow accessible at "poweredby.liiingo.com/myRoute/sign-up"
+  """
+  route: String!
+  stripeSubscriptionId: String
+
+  """S3 url"""
+  logo: String
+
+  """S3 URL"""
+  favicon: String
+  createNewOrganization: Boolean
+  _id: MongoID!
+  updatedAt: Date
+  createdAt: Date
+  essentialTemplate: EssentialTemplate
+  organization: Organization
+}
+
+"""
+The `ID` scalar type represents a unique MongoDB identifier in collection. MongoDB by default use 12-byte ObjectId value (https://docs.mongodb.com/manual/reference/bson-types/#objectid). But MongoDB also may accepts string or integer as correct values for _id field.
+"""
+scalar MongoID
+
+scalar Date
+
+type EssentialTemplate {
+  """
+  A human-readable name for the template. Examples: "PAVE Plus", "Food Menu Basic"
+  """
+  name: String!
+
+  """
+  The Stripe product code used by Stripe to bill a customer for this template
+  """
+  stripeProductCode: String!
+
+  """The locationId of the template app"""
+  templateId: String!
+  _id: MongoID!
+  updatedAt: Date
+  createdAt: Date
+}
+
+type Organization {
+  name: String
+  address: OrganizationAddress
+  email: String
+  phone: String
+  liiingoOrganizationId: String
+  type: EnumOrganizationType
+  parentId: String
+  parentMenuId: String
+  active: Boolean
+  stripeCustomerId: String
+  permissions: OrganizationPermissions
+  _id: MongoID!
+  updatedAt: Date
+  createdAt: Date
+  users(skip: Int, limit: Int = 100, sort: SortFindManyUserInput): [User!]!
+}
+
+type OrganizationAddress {
+  country: String
+  administrativeArea: String
+  subAdministrativeArea: String
+  locality: String
+  postalCode: String
+  thoroughfare: String
+  premise: String
+}
+
+enum EnumOrganizationType {
+  child
+  provider
+  subscriber
+  partner
+}
+
+type OrganizationPermissions {
+  organizationProfile: Boolean
+  brandedLiiingoApp: Boolean
+  hasLiiingoAccess: Boolean
+}
+
+type User {
+  sub: String!
+  email: String!
+  username: String!
+  planId: MongoID
+  billing: String
+  permissions: UserPermissions
+  referrer: String
+  inviteAccepted: Boolean
+  active: Boolean
+  _id: MongoID!
+  updatedAt: Date
+  createdAt: Date
+  organization: Organization
+  location: Location
+}
+
+type UserPermissions {
+  manageUsers: Boolean
+  manageBilling: Boolean
+  manageBusinessProfile: Boolean
+  uploadPatientDocuments: Boolean
+}
+
+type Location {
+  name: String
+  contactName: String
+  phone: String
+  companyName: String
+  email: String
+  customQrLogoImageUrl: String
+  customQrCodeColors: LocationCustomQrCodeColors
+  headerImageUrl: String
+  headerLogoImageUrl: String
+  topicBackgroundImageUrl: String
+  liiingoLocationId: String
+  liiingoSectionId: String
+  liiingoUrl: String
+  exhibit: LocationExhibit
+  _id: MongoID!
+  updatedAt: Date
+  createdAt: Date
+  organization: Organization
+  qrCode: String
+  zipPath: String
+}
+
+type LocationCustomQrCodeColors {
+  primary: String
+  secondary: String
+}
+
+type LocationExhibit {
+  liiingoExhibitId: String
+  qrCodeUrl: String
+  templateId: String
+  templatedContent: [LocationExhibitTemplatedContent]
+}
+
+type LocationExhibitTemplatedContent {
+  liiingoContentId: String
+  liiingoContentType: EnumLocationExhibitTemplatedContentLiiingoContentType
+  languages: ContentLanguages
+  _id: MongoID
+}
+
+enum EnumLocationExhibitTemplatedContentLiiingoContentType {
+  webview
+  text
+  image
+  video
+}
+
+type ContentLanguages {
+  en: ContentLanguagesContent
+  es: ContentLanguagesContent
+  zh_Hans: ContentLanguagesContent
+  de: ContentLanguagesContent
+  pt: ContentLanguagesContent
+  fr: ContentLanguagesContent
+  it: ContentLanguagesContent
+  ru: ContentLanguagesContent
+  ja: ContentLanguagesContent
+  ko: ContentLanguagesContent
+  no: ContentLanguagesContent
+  el: ContentLanguagesContent
+  tr: ContentLanguagesContent
+}
+
+type ContentLanguagesContent {
+  name: String
+  value: String
+  fileUrl: String
+}
+
+enum SortFindManyUserInput {
+  _ID_ASC
+  _ID_DESC
+  SUB_ASC
+  SUB_DESC
+  CREATEDAT_ASC
+  CREATEDAT_DESC
+  CREATEDAT__UPDATEDAT_ASC
+  CREATEDAT__UPDATEDAT_DESC
+}
+
+""""""
+input FilterFindManyAppOnboardingFlowInput {
+  """
+  The portion of the URL immediately following the domain name that will route to the onboarding flow for this Organization. For example: "myRoute" will make this onboarding flow accessible at "poweredby.liiingo.com/myRoute/sign-up"
+  """
+  route: String
+  organizationId: MongoID
+  templateId: MongoID
+  stripeSubscriptionId: String
+
+  """S3 url"""
+  logo: String
+
+  """S3 URL"""
+  favicon: String
+  createNewOrganization: Boolean
+  _id: MongoID
+  updatedAt: Date
+  createdAt: Date
+
+  """List of *indexed* fields that can be filtered via operators."""
+  _operators: FilterFindManyAppOnboardingFlowOperatorsInput
+  OR: [FilterFindManyAppOnboardingFlowInput!]
+  AND: [FilterFindManyAppOnboardingFlowInput!]
+}
+
+"""For performance reason this type contains only *indexed* fields."""
+input FilterFindManyAppOnboardingFlowOperatorsInput {
+  route: FilterFindManyAppOnboardingFlowRouteOperatorsInput
+  _id: FilterFindManyAppOnboardingFlow_idOperatorsInput
+}
+
+input FilterFindManyAppOnboardingFlowRouteOperatorsInput {
+  gt: String
+  gte: String
+  lt: String
+  lte: String
+  ne: String
+  in: [String]
+  nin: [String]
+  regex: RegExpAsString
+  exists: Boolean
+}
+
+"""
+The string representation of JavaScript regexp. You may provide it with flags "/^abc.*/i" or without flags like "^abc.*". More info about RegExp characters and flags: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions
+"""
+scalar RegExpAsString @specifiedBy(url: "http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-262.pdf")
+
+input FilterFindManyAppOnboardingFlow_idOperatorsInput {
+  gt: MongoID
+  gte: MongoID
+  lt: MongoID
+  lte: MongoID
+  ne: MongoID
+  in: [MongoID]
+  nin: [MongoID]
+  exists: Boolean
+}
+
+enum SortFindManyAppOnboardingFlowInput {
+  _ID_ASC
+  _ID_DESC
+  ROUTE_ASC
+  ROUTE_DESC
+}
+
+type getSubscriptionResponse {
+  id: String!
+  trialEnd: String
+  trialStart: String
+  status: String
+  startDate: Int
+  daysUntilDue: Int
+}
+
+type CustomerPaymentMethodResponse {
+  id: String!
+  object: String
+  card: CardResponse
+}
+
+type CardResponse {
+  brand: String
+  checks: CardChecks
+}
+
+type CardChecks {
+  cvcCheck: String
+}
+
+"""A connection to a list of items."""
+type OrganizationConnection {
+  """Total object count."""
+  count: Int!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """Information to aid in pagination."""
+  edges: [OrganizationEdge!]!
+}
+
+"""Information about pagination in a connection."""
+type PageInfo {
+  """When paginating forwards, are there more items?"""
+  hasNextPage: Boolean!
+
+  """When paginating backwards, are there more items?"""
+  hasPreviousPage: Boolean!
+
+  """When paginating backwards, the cursor to continue."""
+  startCursor: String
+
+  """When paginating forwards, the cursor to continue."""
+  endCursor: String
+}
+
+"""An edge in a connection."""
+type OrganizationEdge {
+  """The item at the end of the edge"""
+  node: Organization!
+
+  """A cursor for use in pagination"""
+  cursor: String!
+}
+
+""""""
+input FilterFindManyOrganizationInput {
+  name: String
+  address: FilterFindManyOrganizationAddressInput
+  email: String
+  phone: String
+  type: EnumOrganizationType
+  parentId: String
+  parentMenuId: String
+  userIds: [MongoID]
+  _id: MongoID
+
+  """List of *indexed* fields that can be filtered via operators."""
+  _operators: FilterFindManyOrganizationOperatorsInput
+  OR: [FilterFindManyOrganizationInput!]
+  AND: [FilterFindManyOrganizationInput!]
+}
+
+""""""
+input FilterFindManyOrganizationAddressInput {
+  country: String
+  administrativeArea: String
+  subAdministrativeArea: String
+  locality: String
+  postalCode: String
+  thoroughfare: String
+  premise: String
+}
+
+"""For performance reason this type contains only *indexed* fields."""
+input FilterFindManyOrganizationOperatorsInput {
+  _id: FilterFindManyOrganization_idOperatorsInput
+}
+
+input FilterFindManyOrganization_idOperatorsInput {
+  gt: MongoID
+  gte: MongoID
+  lt: MongoID
+  lte: MongoID
+  ne: MongoID
+  in: [MongoID]
+  nin: [MongoID]
+  exists: Boolean
+}
+
+enum SortConnectionOrganizationEnum {
+  _ID_DESC
+  _ID_ASC
+}
+
+type getNotificationResponse {
+  notifications: [PushNotification]
+}
+
+type PushNotification {
+  _id: String
+  topicName: String
+  topicType: String
+  topicTypeId: String
+  message: String
+  scheduleType: String
+  scheduleTime: String
+  locationId: String
+  notificationSent: Boolean
+  createdDate: String
+  modifiedDate: String
+}
+
+""""""
+input FilterFindOneUserInput {
+  sub: String
+  email: String
+  username: String
+  organizationId: MongoID
+  locationId: MongoID
+  planId: MongoID
+  billing: String
+  referrer: String
+  inviteAccepted: Boolean
+  active: Boolean
+  _id: MongoID
+  updatedAt: Date
+  createdAt: Date
+
+  """List of *indexed* fields that can be filtered via operators."""
+  _operators: FilterFindOneUserOperatorsInput
+  OR: [FilterFindOneUserInput!]
+  AND: [FilterFindOneUserInput!]
+}
+
+"""For performance reason this type contains only *indexed* fields."""
+input FilterFindOneUserOperatorsInput {
+  sub: FilterFindOneUserSubOperatorsInput
+  _id: FilterFindOneUser_idOperatorsInput
+  createdAt: FilterFindOneUserCreatedAtOperatorsInput
+}
+
+input FilterFindOneUserSubOperatorsInput {
+  gt: String
+  gte: String
+  lt: String
+  lte: String
+  ne: String
+  in: [String]
+  nin: [String]
+  regex: RegExpAsString
+  exists: Boolean
+}
+
+input FilterFindOneUser_idOperatorsInput {
+  gt: MongoID
+  gte: MongoID
+  lt: MongoID
+  lte: MongoID
+  ne: MongoID
+  in: [MongoID]
+  nin: [MongoID]
+  exists: Boolean
+}
+
+input FilterFindOneUserCreatedAtOperatorsInput {
+  gt: Date
+  gte: Date
+  lt: Date
+  lte: Date
+  ne: Date
+  in: [Date]
+  nin: [Date]
+  exists: Boolean
+}
+
+enum SortFindOneUserInput {
+  _ID_ASC
+  _ID_DESC
+  SUB_ASC
+  SUB_DESC
+  CREATEDAT_ASC
+  CREATEDAT_DESC
+  CREATEDAT__UPDATEDAT_ASC
+  CREATEDAT__UPDATEDAT_DESC
+}
+
+"""A connection to a list of items."""
+type UserConnection {
+  """Total object count."""
+  count: Int!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """Information to aid in pagination."""
+  edges: [UserEdge!]!
+}
+
+"""An edge in a connection."""
+type UserEdge {
+  """The item at the end of the edge"""
+  node: User!
+
+  """A cursor for use in pagination"""
+  cursor: String!
+}
+
+""""""
+input FilterFindManyUserInput {
+  sub: String
+  email: String
+  username: String
+  organizationId: MongoID
+  locationId: MongoID
+  planId: MongoID
+  billing: String
+  referrer: String
+  inviteAccepted: Boolean
+  active: Boolean
+  _id: MongoID
+  updatedAt: Date
+  createdAt: Date
+
+  """List of *indexed* fields that can be filtered via operators."""
+  _operators: FilterFindManyUserOperatorsInput
+  OR: [FilterFindManyUserInput!]
+  AND: [FilterFindManyUserInput!]
+}
+
+"""For performance reason this type contains only *indexed* fields."""
+input FilterFindManyUserOperatorsInput {
+  sub: FilterFindManyUserSubOperatorsInput
+  _id: FilterFindManyUser_idOperatorsInput
+  createdAt: FilterFindManyUserCreatedAtOperatorsInput
+}
+
+input FilterFindManyUserSubOperatorsInput {
+  gt: String
+  gte: String
+  lt: String
+  lte: String
+  ne: String
+  in: [String]
+  nin: [String]
+  regex: RegExpAsString
+  exists: Boolean
+}
+
+input FilterFindManyUser_idOperatorsInput {
+  gt: MongoID
+  gte: MongoID
+  lt: MongoID
+  lte: MongoID
+  ne: MongoID
+  in: [MongoID]
+  nin: [MongoID]
+  exists: Boolean
+}
+
+input FilterFindManyUserCreatedAtOperatorsInput {
+  gt: Date
+  gte: Date
+  lt: Date
+  lte: Date
+  ne: Date
+  in: [Date]
+  nin: [Date]
+  exists: Boolean
+}
+
+enum SortConnectionUserEnum {
+  _ID_DESC
+  _ID_ASC
+  SUB_DESC
+  SUB_ASC
+}
+
+type Plan {
+  """A human-readable name for the plan."""
+  name: String!
+
+  """Annual stripe id"""
+  annualStripeId: String!
+
+  """Monthly stripe id"""
+  monthlyStripeId: String!
+
+  """Object containing the restrictions for this plan, i.e. pageLimit"""
+  restrictions: JSON
+  _id: MongoID!
+  updatedAt: Date
+  createdAt: Date
+}
+
+type Mutation {
+  createTemplatedAppOnboardingFlow(organizationName: String!, organizationEmail: String!, organizationLogo: String, organizationFavicon: String, onboardingRoute: String!, onboardingTemplate: EssentialTemplateInput!, createNewOrganization: Boolean): CreateTemplatedAppOnboardingFlowMutationResponse
+  createTemplatedOrgOnboardingFlow(onboardingRoute: String!, onboardingTemplate: EssentialTemplateInput!): CreateTemplatedOrgOnboardingFlowMutationResponse
+  createBillingSession(_id: String!, returnUrl: String): BillingPortalResponse
+  createCheckoutSession(route: String!, productCode: String, successUrl: String!, cancelUrl: String!): CreateCheckoutSessionResponse
+  verifyPayment(checkoutSessionId: String!, isUpgrade: Boolean!): VerifyPaymentResponse
+
+  """
+  Update one document: 1) Retrieve one document via findOne. 2) Apply updates to mongoose document. 3) Mongoose applies defaults, setters, hooks and validation. 4) And save it.
+  """
+  locationUpdateOne(
+    record: UpdateOneLocationInput!
+
+    """Filter by fields"""
+    filter: FilterUpdateOneLocationInput!
+    sort: SortUpdateOneLocationInput
+    skip: Int
+  ): UpdateOneLocationPayload
+  sendNotification(message: String!, scheduledTime: String, topicId: String!): SendNotificationResponse
+  deleteNotification(id: String!): DeleteNotificationResponse
+
+  """
+  Update one document: 1) Retrieve one document via findOne. 2) Apply updates to mongoose document. 3) Mongoose applies defaults, setters, hooks and validation. 4) And save it.
+  """
+  organizationUpdateOne(
+    record: UpdateOneOrganizationInput!
+
+    """Filter by fields"""
+    filter: FilterUpdateOneOrganizationInput
+    sort: SortUpdateOneOrganizationInput
+    skip: Int
+  ): UpdateOneOrganizationPayload
+  register(organizationId: String!, onboardingRoute: String!, termsOfService: Boolean!, referrer: String): RegisterResponse
+  registerNewOrg(onboardingRoute: String!, termsOfService: Boolean!, referrer: String, planId: String, billing: String): RegisterResponse
+  inviteUser(email: String!): Boolean
+  closeAccount(route: String!): UpdateOneUserPayload
+
+  """
+  Update one document: 1) Retrieve one document via findOne. 2) Apply updates to mongoose document. 3) Mongoose applies defaults, setters, hooks and validation. 4) And save it.
+  """
+  userUpdateOne(
+    record: UpdateOneUserInput!
+
+    """Filter by fields"""
+    filter: FilterUpdateOneUserInput!
+    sort: SortUpdateOneUserInput
+    skip: Int
+  ): UpdateOneUserPayload
+  createPlan(name: String!, annualStripeId: String!, monthlyStripeId: String!, restrictions: RestrictionsInput): CreatePlanMutationResponse
+}
+
+type CreateTemplatedAppOnboardingFlowMutationResponse {
+  appOnboardingFlow: AppOnboardingFlow
+}
+
+input EssentialTemplateInput {
+  name: String!
+
+  """
+  This is actually referred to as a "Price" in the Stripe Dashboard and looks like this: price_1IrDFwC8BvMYvOOAZXyvDnaG
+  """
+  stripeProductCode: String!
+
+  """The locationId of the template app"""
+  templateId: String!
+}
+
+type CreateTemplatedOrgOnboardingFlowMutationResponse {
+  orgOnboardingFlow: AppOnboardingFlow
+}
+
+type BillingPortalResponse {
+  url: String!
+}
+
+type CreateCheckoutSessionResponse {
+  sessionId: String!
+}
+
+type VerifyPaymentResponse {
+  verified: Boolean!
+  _id: String!
+}
+
+type UpdateOneLocationPayload {
+  """Document ID"""
+  recordId: MongoID
+
+  """Updated document"""
+  record: Location
+
+  """
+  Error that may occur during operation. If you request this field in GraphQL query, you will receive typed error in payload; otherwise error will be provided in root `errors` field of GraphQL response.
+  """
+  error: ErrorInterface
+}
+
+""""""
+input UpdateOneLocationInput {
+  name: String
+  contactName: String
+  phone: String
+  companyName: String
+  email: String
+  customQrLogoImageUrl: String
+  customQrCodeColors: UpdateOneLocationCustomQrCodeColorsInput
+  headerImageUrl: String
+  headerLogoImageUrl: String
+  topicBackgroundImageUrl: String
+  organizationId: MongoID
+  liiingoLocationId: String
+  liiingoSectionId: String
+  liiingoUrl: String
+  exhibit: UpdateOneLocationExhibitInput
+  updatedAt: Date
+  createdAt: Date
+  customQrLogoImage: Upload
+  headerImage: Upload
+  headerLogoImage: Upload
+  topicBackgroundImage: Upload
+}
+
+""""""
+input UpdateOneLocationCustomQrCodeColorsInput {
+  primary: String
+  secondary: String
+}
+
+""""""
+input UpdateOneLocationExhibitInput {
+  liiingoExhibitId: String
+  qrCodeUrl: String
+  templateId: String
+  templatedContent: [UpdateOneLocationExhibitTemplatedContentInput]
+}
+
+""""""
+input UpdateOneLocationExhibitTemplatedContentInput {
+  liiingoContentId: String
+  liiingoContentType: EnumLocationExhibitTemplatedContentLiiingoContentType
+  languages: ContentLanguagesInput
+  _id: MongoID
+}
+
+input ContentLanguagesInput {
+  en: ContentLanguagesContentInput
+  es: ContentLanguagesContentInput
+  zh_Hans: ContentLanguagesContentInput
+  de: ContentLanguagesContentInput
+  pt: ContentLanguagesContentInput
+  fr: ContentLanguagesContentInput
+  it: ContentLanguagesContentInput
+  ru: ContentLanguagesContentInput
+  ja: ContentLanguagesContentInput
+  ko: ContentLanguagesContentInput
+  no: ContentLanguagesContentInput
+  el: ContentLanguagesContentInput
+  tr: ContentLanguagesContentInput
+}
+
+input ContentLanguagesContentInput {
+  name: String
+  value: String
+  fileUrl: String
+  binaryValue: Upload
+}
+
+"""The `Upload` scalar type represents a file upload."""
+scalar Upload
+
+""""""
+input FilterUpdateOneLocationInput {
+  _id: MongoID!
+}
+
+enum SortUpdateOneLocationInput {
+  _ID_ASC
+  _ID_DESC
+  CREATEDAT_ASC
+  CREATEDAT_DESC
+  CREATEDAT__UPDATEDAT_ASC
+  CREATEDAT__UPDATEDAT_DESC
+}
+
+type SendNotificationResponse {
+  success: Boolean!
+}
+
+type DeleteNotificationResponse {
+  success: Boolean!
+}
+
+type UpdateOneOrganizationPayload {
+  """Document ID"""
+  recordId: MongoID
+
+  """Updated document"""
+  record: Organization
+
+  """
+  Error that may occur during operation. If you request this field in GraphQL query, you will receive typed error in payload; otherwise error will be provided in root `errors` field of GraphQL response.
+  """
+  error: ErrorInterface
+}
+
+""""""
+input UpdateOneOrganizationInput {
+  name: String
+  address: UpdateOneOrganizationAddressInput
+  email: String
+  phone: String
+  type: EnumOrganizationType
+  parentId: String
+  parentMenuId: String
+  userIds: [MongoID]
+}
+
+""""""
+input UpdateOneOrganizationAddressInput {
+  country: String
+  administrativeArea: String
+  subAdministrativeArea: String
+  locality: String
+  postalCode: String
+  thoroughfare: String
+  premise: String
+}
+
+""""""
+input FilterUpdateOneOrganizationInput {
+  name: String
+  address: FilterUpdateOneOrganizationAddressInput
+  email: String
+  phone: String
+  type: EnumOrganizationType
+  parentId: String
+  parentMenuId: String
+  userIds: [MongoID]
+  _id: MongoID
+
+  """List of *indexed* fields that can be filtered via operators."""
+  _operators: FilterUpdateOneOrganizationOperatorsInput
+  OR: [FilterUpdateOneOrganizationInput!]
+  AND: [FilterUpdateOneOrganizationInput!]
+}
+
+""""""
+input FilterUpdateOneOrganizationAddressInput {
+  country: String
+  administrativeArea: String
+  subAdministrativeArea: String
+  locality: String
+  postalCode: String
+  thoroughfare: String
+  premise: String
+}
+
+"""For performance reason this type contains only *indexed* fields."""
+input FilterUpdateOneOrganizationOperatorsInput {
+  _id: FilterUpdateOneOrganization_idOperatorsInput
+}
+
+input FilterUpdateOneOrganization_idOperatorsInput {
+  gt: MongoID
+  gte: MongoID
+  lt: MongoID
+  lte: MongoID
+  ne: MongoID
+  in: [MongoID]
+  nin: [MongoID]
+  exists: Boolean
+}
+
+enum SortUpdateOneOrganizationInput {
+  _ID_ASC
+  _ID_DESC
+  CREATEDAT_ASC
+  CREATEDAT_DESC
+  CREATEDAT__UPDATEDAT_ASC
+  CREATEDAT__UPDATEDAT_DESC
+}
+
+type RegisterResponse {
+  sessionId: String
+}
+
+type UpdateOneUserPayload {
+  """Document ID"""
+  recordId: MongoID
+
+  """Updated document"""
+  record: User
+
+  """
+  Error that may occur during operation. If you request this field in GraphQL query, you will receive typed error in payload; otherwise error will be provided in root `errors` field of GraphQL response.
+  """
+  error: ErrorInterface
+}
+
+""""""
+input UpdateOneUserInput {
+  sub: String
+  email: String
+  username: String
+  organizationId: MongoID
+  locationId: MongoID
+  planId: MongoID
+  billing: String
+  inviteAccepted: Boolean
+}
+
+""""""
+input FilterUpdateOneUserInput {
+  sub: String
+}
+
+enum SortUpdateOneUserInput {
+  _ID_ASC
+  _ID_DESC
+  SUB_ASC
+  SUB_DESC
+  CREATEDAT_ASC
+  CREATEDAT_DESC
+  CREATEDAT__UPDATEDAT_ASC
+  CREATEDAT__UPDATEDAT_DESC
+}
+
+type CreatePlanMutationResponse {
+  plan: Plan
+}
+
+input RestrictionsInput {
+  """Limit of pages a user can have"""
+  pageLimit: Int
+}

@@ -1,0 +1,138 @@
+{
+  "name": "poweredby-api",
+  "version": "1.0.0",
+  "description": "PoweredBy GraphQL API",
+  "main": "src/index.js",
+  "license": "NONE",
+  "private": true,
+  "scripts": {
+    "start": "nodemon -e ts,graphql --exec ts-node -- src/index.ts",
+    "build": "ts-node --transpile-only src/index.ts",
+    "build:schema": "ts-node ./src/scripts/buildSchema.ts",
+    "watch:schema": "ts-node ./src/scripts/watchSchema.ts",
+    "test": "exit 0; #jest --maxWorkers 8",
+    "test:watch": "exit 0; #jest --watch --maxWorkers 8",
+    "pretty": "prettier --check './src/**/*.{js,jsx,ts,tsx,md}'",
+    "deleteUser": "ts-node ./src/scripts/deleteUser.ts",
+    "codegen": "graphql-codegen --config codegen.yml"
+  },
+  "dependencies": {
+    "@koa/cors": "^3.1.0",
+    "@liiingo/core-api-client-typescript": "git+ssh://git@github.com:liiingo/core-api-client-typescript.git#v1.7.0",
+    "@sendgrid/mail": "^7.4.0",
+    "apollo-server-koa": "^2.19.1",
+    "apollo-server-types": "^0.6.2",
+    "app-module-path": "^2.2.0",
+    "aws-sdk": "^2.817.0",
+    "axios": "^0.21.0",
+    "bcryptjs": "^2.4.3",
+    "cls-rtracer": "^2.5.1",
+    "cognito-jwt-token-validator": "^1.0.0",
+    "dataloader": "^1.4.0",
+    "dotenv": "^8.2.0",
+    "form-data": "^3.0.0",
+    "fs-extra": "^9.0.1",
+    "graphql": "^15.5.0",
+    "graphql-compose": "^7.22.1",
+    "graphql-compose-mongoose": "^9.0.0",
+    "graphql-upload": "^11.0.0",
+    "humps": "^2.0.1",
+    "husky": "^4.3.0",
+    "jsonwebtoken": "^8.5.1",
+    "koa": "^2.6.1",
+    "koa-bodyparser": "^4.3.0",
+    "koa-csrf": "^3.0.8",
+    "koa-mount": "^4.0.0",
+    "koa-pino-logger": "^3.0.0",
+    "koa-router": "^10.0.0",
+    "lint-staged": "^10.5.1",
+    "lodash": "^4.17.21",
+    "mongoose": "^5.10.13",
+    "mongoose-timestamp": "^0.6.0",
+    "pg": "^7.6.1",
+    "pino": "^6.8.0",
+    "pino-pretty": "^4.7.1",
+    "reflect-metadata": "^0.1.12",
+    "stripe": "^8.126.0",
+    "ts-node": "^7.0.1",
+    "type-graphql": "^0.15.0",
+    "uuid": "^8.3.2"
+  },
+  "devDependencies": {
+    "@graphql-codegen/cli": "1.20.1",
+    "@graphql-codegen/typescript": "1.21.0",
+    "@graphql-codegen/typescript-resolvers": "^1.18.2",
+    "@types/bcryptjs": "^2.4.2",
+    "@types/form-data": "^2.5.0",
+    "@types/fs-extra": "^9.0.3",
+    "@types/graphql-upload": "^8.0.4",
+    "@types/humps": "^2.0.0",
+    "@types/jest": "^23.3.9",
+    "@types/jsonwebtoken": "^8.5.0",
+    "@types/koa": "^2.0.46",
+    "@types/koa-bodyparser": "^4.3.0",
+    "@types/koa-json": "^2.0.18",
+    "@types/koa-pino-logger": "^3.0.0",
+    "@types/koa-router": "^7.4.1",
+    "@types/mongoose": "^5.10.0",
+    "@types/node": "^10.17.48",
+    "@types/pino": "^6.3.4",
+    "@types/supertest": "^2.0.6",
+    "@types/uuid": "^8.3.0",
+    "apollo": "^2.32.1",
+    "apollo-boost": "^0.4.9",
+    "concurrently": "^4.1.0",
+    "cross-fetch": "^3.0.6",
+    "jest": "^26.6.3",
+    "jest-cli": "^26.6.3",
+    "jest-fetch-mock": "^3.0.3",
+    "mongodb": "^3.6.6",
+    "mongodb-memory-server": "^6.9.2",
+    "node-watch": "^0.7.1",
+    "nodemon": "^1.17.5",
+    "prettier": "^2.2.0",
+    "supertest": "^3.3.0",
+    "ts-jest": "^26.5.1",
+    "typescript": "^3.0.1"
+  },
+  "jest": {
+    "transform": {
+      "^.+\\.tsx?$": "ts-jest"
+    },
+    "modulePaths": [
+      "<rootDir>"
+    ],
+    "testRegex": "(/src/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "jsx",
+      "json",
+      "node"
+    ],
+    "setupFilesAfterEnv": [
+      "<rootDir>/test/setupTestFramework.js"
+    ],
+    "globalSetup": "<rootDir>/test/setup.js",
+    "globalTeardown": "<rootDir>/test/teardown.js",
+    "coverageReporters": [
+      "lcov",
+      "html"
+    ],
+    "moduleNameMapper": {
+      "^mongoose$": "<rootDir>/node_modules/mongoose"
+    },
+    "testEnvironment": "<rootDir>/test/environment/mongodb"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx,md}": [
+      "prettier --write"
+    ]
+  }
+}

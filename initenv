@@ -1,0 +1,41 @@
+# This script is just a convenience to get the initial developer environment set up.
+# It should be run once when the repo is first cloned, and can be run later on to 
+# install/update node_modules in both projects, as a convenience.
+# It installs node_modules in both the frontend ("web") and backend ("api") projects and
+# creates a '.env' file from the provided '.env.example' (if no .env file exists - it won't overwrite an existing .env file).
+#
+
+root_path=$( cd "$(dirname $(dirname "${BASH_SOURCE[0]}"))" ; pwd -P )
+
+# Load NVM
+NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+
+# Install/update node_modules in the 'web' project
+echo "\nInstalling node_modules in the 'web' project...\n";
+cd $root_path/web
+nvm use && yarn
+
+# Install/update node_modules in the 'api' project
+echo "\nInstalling node_modules in the 'api' project...\n";
+cd $root_path/api
+nvm use && yarn
+
+cd $root_path
+
+# Docker-compose needs a few ENV variables to be set that are defined in the .env file.
+# If no .env file is found, create one from the provided `.env.example` file.
+# Once the `.env` file exists in the project root, the docker-compose command will automatically
+# load ENV vars from it. This allows the docker-compose command to be run without specifying 
+# the --env-file parameter every time.
+if [ ! -f "$root_path/.env" ]; then
+    echo "\nNo .env file found. Creating one from the .env.example file...\n";
+    cp $root_path/.env.example $root_path/.env
+fi
+
+# Uncomment the following 'docker-compose' command if you want this script to actually start up the docker containers
+
+# All arguments passed to this script will be set in the DC_YARN_COMMAND environment variable.
+# Docker-compose will interpret this var as the command to be passed to 'yarn'
+# This docker-compose command layers two docker-compose.yml files on top of each other
+# DC_YARN_COMMAND="$@" docker-compose -f docker-compose.yml -f docker-compose.dev.yml up web

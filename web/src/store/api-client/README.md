@@ -1,0 +1,154 @@
+Items below have been copied from php api PermissionService.php
+Lots of endpoints listed. Potential resource for documentation or discovering what's available.
+
+<!-- 
+        return array(
+            'error'=>array(
+                'show404',
+                'show500',
+                'show500redirect',
+                'show500redirectHome',
+                ),
+            'cron'=>array(
+                'tenMin',
+                'hourly',
+                'daily',
+                'weekly',
+                ),
+            'index'=>array(
+                'index',
+                'login',
+                ),
+            'auth'=>array(
+                'login',
+                'refresh',
+                ),
+			'role'=>array(
+				'index'   
+				'simpleSearch'   
+				'create'  
+				'edit'    
+				'delete'   
+				),
+			'user'=>array(
+                'resetPasswordEmail'   ,
+                'updateForgottenPassword'   ,
+				),
+			'location'=>array(
+                'save',
+                'get',
+                'getParent',
+                'getWithAreas',
+                'setAreaOrder',
+                'deleteImg',
+                'getActive',
+                'createThumb',
+                'resetThumbStatus',
+                'getLocation',
+				'getLocationsByOrgId'
+                // 'getLocationsAndAreas',
+                ),
+            'notification'=>array(
+                'save',
+                'get',
+                'deleteNotification',
+                'activeNotifications'
+            ),
+            'user-notification'=>array(
+                'save',
+                'get',
+                'sendPushNotification'
+            ),
+            'user-analytic'=>array(
+                'save',
+                'get',
+                'getByType'
+            ),
+			'area'=>array(
+                'save',
+                'get',
+                'getAreaById'
+                'getAreasByLocationId',
+                'printQrs',
+                'setExhibitOrder' 
+                ),
+            'exhibit'=>array(
+                'save',
+                'getExhibitsByAreaId',
+                'get',
+                'getAllExhibits'
+                'getExhibitsByLocationId'
+                'getExhibitById',
+                'printQrs',
+                'getExhibitsByOrganizationId',
+                'getMyExhibitListSimple' 
+                'lastViewed' 
+                'createThumb'  
+                'resetThumbStatus',
+                'resetBranchUrlStatus',
+                'saveBackground' 
+                'updateBranchUrl',
+                'updateAndCreateBranchUrl',
+                'createBlankBranchLinkUrl',
+                'getBlankBranchLinkUrl',
+                'getExhibitByLocation',
+				'getZipPath',
+				'getStatusByExhibitIds',
+                ),
+			'content'=>array(
+                'save',
+                'getAll',
+				'getOrganizationContent',
+                'getByIdList',
+                'getById',
+                'getByExhibitId',
+                'duplicate',
+                'delete',
+                'resizeExistingImages',
+                'thumbsForExistingImages',
+                'resetThumbStatus',
+                'translate',
+                'getJWPUploadLink',
+                'search',
+                'share'
+                ),
+            'translations'=>array(
+                'getTranslations',
+                ),
+			'organization'=>array(
+                'create',
+                'delete',
+				'undoDelete',
+                'get',
+                'getAll',
+                'resetPasswordEmail'   ,
+				'createPasswordResetToken'   ,
+				'updateForgottenPassword'   ,
+                'impersonateStart'   ,
+                'impersonateStop'   ,
+                'saveCustomQrSettings'   ,
+                'providerCreate'   ,
+                ),
+			'folder'=>array(
+                'create',
+                'update'
+                'delete',
+                'get',
+                'root' 
+                ),
+            'box'=>array(
+                'checkin'
+                'connect'
+                'shortCode'
+                'pairDevice'
+                'deviceList'
+                'setTopic'
+                'setName'
+                'delete'
+                'setNotes'
+                ),
+			'analytics'=>array(
+                'view',
+                'share'
+                'metrics',
+                ),

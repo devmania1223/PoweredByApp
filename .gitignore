@@ -1,0 +1,17 @@
+.env
+yarn-error.log
+/node_modules/
+
+.vscode/
+
+.DS_Store
+
+*env-secrets.yaml*
+*envsecrets.yaml*
+
+# cypress 
+e2e/cypress/screenshots
+e2e/cypress/videos
+
+# mongodb playground
+*.mongodb

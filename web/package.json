@@ -1,0 +1,139 @@
+{
+  "name": "poweredby-web",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "withenv": "export $(cat ../.env | xargs) && yarn",
+    "withenv-windows": "python env.py && yarn",
+    "start": "yarn withenv react-scripts start",
+    "start-windows": "yarn withenv-windows react-scripts start",
+    "startnoenv": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "pretty": "prettier --check './src/**/*.{js,jsx,ts,tsx,md}'",
+    "lint": "eslint --ignore-path .gitignore .",
+    "storybook": "start-storybook -p 6006 -s public",
+    "build-storybook": "build-storybook -s public",
+    "types:build": "apollo client:codegen --target=typescript --outputFlat --localSchemaFile=../api/src/data/schema.graphql --tagName=gql --includes=src/services/*.ts src/types/",
+    "eject": "react-scripts eject"
+  },
+  "dependencies": {
+    "@apollo/client": "^3.3.6",
+    "@aws-amplify/ui-react": "^1.0.7",
+    "@bugsnag/js": "^7.9.0",
+    "@bugsnag/plugin-react": "^7.9.0",
+    "@elgorditosalsero/react-gtm-hook": "^2.0.7",
+    "@liiingo/core-api-client-typescript": "git+ssh://git@github.com:liiingo/core-api-client-typescript.git#v1.7.0",
+    "@manaflair/redux-batch": "^1.0.0",
+    "@material-ui/core": "^4.11.1",
+    "@material-ui/icons": "^4.11.2",
+    "@material-ui/lab": "^4.0.0-alpha.56",
+    "@material-ui/pickers": "^4.0.0-alpha.12",
+    "@material-ui/styles": "^4.11.4",
+    "@reduxjs/toolkit": "^1.6.0",
+    "@stripe/react-stripe-js": "^1.1.2",
+    "@stripe/stripe-js": "^1.11.0",
+    "@testing-library/jest-dom": "^5.11.4",
+    "@testing-library/react": "^11.1.0",
+    "@testing-library/user-event": "^12.1.10",
+    "@tinymce/tinymce-react": "^3.12.6",
+    "@types/form-data": "^2.5.0",
+    "@types/jest": "^26.0.15",
+    "@types/jsonwebtoken": "^8.5.0",
+    "@types/node": "^12.0.0",
+    "@types/react": "^17.0.0",
+    "@types/react-color": "^3.0.4",
+    "@types/react-dom": "^17.0.0",
+    "@types/react-helmet": "^6.1.0",
+    "@types/react-redux": "^7.1.16",
+    "@types/react-router-dom": "^5.1.6",
+    "apollo-link-error": "^1.1.13",
+    "apollo-upload-client": "^14.1.3",
+    "array-move": "^3.0.1",
+    "aws-amplify": "^3.3.27",
+    "base64-url": "^2.3.3",
+    "connected-react-router": "^6.9.1",
+    "date-fns": "^2.21.1",
+    "graphql": "^15.4.0",
+    "highcharts": "^9.2.2",
+    "highcharts-react-official": "^3.0.0",
+    "jsonwebtoken": "^8.5.1",
+    "lodash": "^4.17.21",
+    "mongodb-bson-types": "^0.1.5",
+    "react": "^17.0.2",
+    "react-beautiful-dnd": "^13.1.0",
+    "react-color": "^2.19.3",
+    "react-cropper": "^2.1.8",
+    "react-dom": "^17.0.2",
+    "react-dropzone": "^11.2.4",
+    "react-helmet": "^6.1.0",
+    "react-hook-form": "^6.12.1",
+    "react-input-mask": "^2.0.4",
+    "react-jw-player": "^1.19.1",
+    "react-password-strength-bar": "^0.3.2",
+    "react-redux": "^7.2.4",
+    "react-router-dom": "^5.2.0",
+    "react-scripts": "4.0.3",
+    "redux": "^4.1.0",
+    "redux-devtools-extension": "^2.13.9",
+    "redux-thunk": "^2.3.0",
+    "tinymce": "^5.8.1",
+    "typescript": "^4.1.2",
+    "web-vitals": "^1.0.1"
+  },
+  "devDependencies": {
+    "@storybook/addon-actions": "^6.2.9",
+    "@storybook/addon-essentials": "^6.2.9",
+    "@storybook/addon-links": "^6.2.9",
+    "@storybook/node-logger": "^6.2.9",
+    "@storybook/preset-create-react-app": "^3.1.7",
+    "@storybook/react": "^6.2.9",
+    "apollo": "^2.32.1",
+    "husky": "^4.3.0",
+    "lint-staged": "^10.5.1",
+    "prettier": "^2.2.0",
+    "storybook-addon-designs": "^5.4.5"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ],
+    "overrides": [
+      {
+        "files": [
+          "**/*.stories.*"
+        ],
+        "rules": {
+          "import/no-anonymous-default-export": "off"
+        }
+      }
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx,md}": [
+      "prettier --write"
+    ]
+  },
+  "resolutions": {
+    "babel-loader": "8.1.0"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}
+

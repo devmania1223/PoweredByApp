@@ -1,0 +1,21 @@
+# This is the PRODUCTION configuration.
+# Don't put dev environment stuff in here plz.
+version: "3.7"
+
+services:
+  web:
+    image: poweredby/web
+    build: ./web
+    ports:
+      - "1234:1234" # parcel web server
+    env_file:
+      - .env
+    entrypoint: ["yarn", "${DC_YARN_COMMAND:-start}"] # The default command is 'start' if none is provided
+  api:
+    image: poweredby/api
+    build: ./api
+    ports:
+      - "4000:4000"
+    env_file:
+      - .env
+    entrypoint: ["yarn", "${DC_YARN_COMMAND:-start}"] # The default command is 'start' if none is provided

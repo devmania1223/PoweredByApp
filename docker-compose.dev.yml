@@ -1,0 +1,49 @@
+version: "3.7"
+
+services:
+  mongo:
+    image: mongo
+    restart: always
+    ports:
+      - "${MONGO_PORT}:${MONGO_PORT}"
+    volumes:
+      - data-volume:/data/db
+    env_file:
+      - .env
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD}
+      MONGO_INITDB_DATABASE: ${MONGO_DATABASE}
+  web:
+    build:
+      context: ./web
+      dockerfile: Dockerfile-dev
+    ports:
+      - "1235:1235" # parcel hmr server
+    volumes:
+      - ./web/:/usr/src/
+    depends_on:
+      - api
+  api:
+    build:
+      context: ./api
+      dockerfile: Dockerfile-dev
+    volumes:
+      - ./api/:/usr/src/
+    depends_on:
+      - mongo
+  storybook:
+    image: poweredby/web # The 'storybook' service uses the same image as the 'web' service, but runs a different yarn command
+    build: ./web
+    ports:
+      - "6006:6006" # storybook
+    env_file:
+      - .env
+    volumes:
+      - ./web/:/usr/src/
+    logging: # storybook is real chatty, and it hides application logs
+      driver: "none"
+    entrypoint: ["yarn", "${DC_YARN_COMMAND:-storybook}"] # The default command is 'storybook' if none is provided
+
+volumes:
+  data-volume:
